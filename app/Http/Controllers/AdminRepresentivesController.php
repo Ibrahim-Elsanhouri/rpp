@@ -62,6 +62,8 @@
 	        | 
 	        */
 	        $this->sub_module = array();
+			$this->sub_module[] = 
+			['label'=>'سجل الزيارات','path'=>'visits','parent_columns'=>'name','foreign_key'=>'representives_id','button_color'=>'success','button_icon'=>'fa fa-bars'];
 
 
 	        /* 
