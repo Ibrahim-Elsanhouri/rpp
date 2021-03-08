@@ -5,7 +5,7 @@
 	use DB;
 	use CRUDBooster;
 
-	class AdminRepresentivesController extends \crocodicstudio\crudbooster\controllers\CBController {
+	class AdminCmsUsers15Controller extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function cbInit() {
 
@@ -25,28 +25,33 @@
 			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = false;
-			$this->table = "representives";
+			$this->table = "cms_users";
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
 			$this->col[] = ["label"=>"الاسم","name"=>"name"];
-			$this->col[] = ["label"=>"الجوال","name"=>"mobile"];
 			$this->col[] = ["label"=>"البريد الالكتروني","name"=>"email"];
+			$this->col[] = ["label"=>"الجوال","name"=>"mobile"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
 			$this->form[] = ['label'=>'الاسم','name'=>'name','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'فضلا ادخل احرف فقط'];
-			$this->form[] = ['label'=>'الجوال','name'=>'mobile','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'البريد الالكتروني','name'=>'email','type'=>'email','validation'=>'required|min:1|max:255|email|unique:representives','width'=>'col-sm-10','placeholder'=>'صيغة البريد الإلكتروني غير صحيحة'];
+			$this->form[] = ['label'=>'البريد الالكتروني','name'=>'email','type'=>'email','validation'=>'required|min:1|max:255|email|unique:cms_users','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'الجوال','name'=>'mobile','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','placeholder'=>'صيغة البريد الإلكتروني غير صحيحة'];
+			$this->form[] = ['label'=>'كلمة المرور','name'=>'password','type'=>'password','validation'=>'min:3|max:32','width'=>'col-sm-10','help'=>'٥ احرف فما فوق ، اترك الحقل فارغا اذا لا تريد تغيير كلمة المرور'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
 			//$this->form[] = ["label"=>"Name","name"=>"name","type"=>"text","required"=>TRUE,"validation"=>"required|string|min:3|max:70","placeholder"=>"فضلا ادخل احرف فقط"];
+			//$this->form[] = ["label"=>"Photo","name"=>"photo","type"=>"upload","required"=>TRUE,"validation"=>"required|image|max:3000","help"=>"الملفات المدعومة : JPG, JPEG, PNG, GIF, BMP"];
+			//$this->form[] = ["label"=>"Email","name"=>"email","type"=>"email","required"=>TRUE,"validation"=>"required|min:1|max:255|email|unique:cms_users","placeholder"=>"صيغة البريد الإلكتروني غير صحيحة"];
+			//$this->form[] = ["label"=>"Password","name"=>"password","type"=>"password","required"=>TRUE,"validation"=>"min:3|max:32","help"=>"٥ احرف فما فوق ، اترك الحقل فارغا اذا لا تريد تغيير كلمة المرور"];
 			//$this->form[] = ["label"=>"Mobile","name"=>"mobile","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
-			//$this->form[] = ["label"=>"Email","name"=>"email","type"=>"email","required"=>TRUE,"validation"=>"required|min:1|max:255|email|unique:representives","placeholder"=>"صيغة البريد الإلكتروني غير صحيحة"];
+			//$this->form[] = ["label"=>"Cms Privileges","name"=>"id_cms_privileges","type"=>"select2","required"=>TRUE,"validation"=>"required|integer|min:0","datatable"=>"cms_privileges,name"];
+			//$this->form[] = ["label"=>"Status","name"=>"status","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
 			# OLD END FORM
 
 			/* 
@@ -63,7 +68,8 @@
 	        */
 	        $this->sub_module = array();
 			$this->sub_module[] = 
-			['label'=>'سجل الزيارات','path'=>'visits','parent_columns'=>'name','foreign_key'=>'representives_id','button_color'=>'success','button_icon'=>'fa fa-bars'];
+			['label'=>'سجل الزيارات','path'=>'visits','parent_columns'=>'name','foreign_key'=>'cms_users_id','button_color'=>'success','button_icon'=>'fa fa-bars'];			
+
 
 
 	        /* 
@@ -236,7 +242,8 @@
 	    */
 	    public function hook_query_index(&$query) {
 	        //Your code here
-	            
+			$query->where('id_cms_privileges',3);
+
 	    }
 
 	    /*
@@ -247,6 +254,7 @@
 	    */    
 	    public function hook_row_index($column_index,&$column_value) {	        
 	    	//Your code here
+
 	    }
 
 	    /*
@@ -258,6 +266,8 @@
 	    */
 	    public function hook_before_add(&$postdata) {        
 	        //Your code here
+			$postdata['id_cms_privileges'] = '3';
+
 
 	    }
 

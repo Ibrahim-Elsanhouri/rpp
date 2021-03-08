@@ -5,7 +5,7 @@
 	use DB;
 	use CRUDBooster;
 
-	class AdminVisitsController extends \crocodicstudio\crudbooster\controllers\CBController {
+	class AdminVisits16Controller extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function cbInit() {
 
@@ -24,7 +24,7 @@
 			$this->button_show = true;
 			$this->button_filter = true;
 			$this->button_import = false;
-			$this->button_export = true;
+			$this->button_export = false;
 			$this->table = "visits";
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
@@ -32,27 +32,23 @@
 			$this->col = [];
 			$this->col[] = ["label"=>"تاريخ الزيارة","name"=>"date"];
 			$this->col[] = ["label"=>"العميل","name"=>"customers_id","join"=>"customers,name"];
-			$this->col[] = ["label"=>"المندوب","name"=>"cms_users_id","join"=>"cms_users,name"];
-			$this->col[] = ["label"=>"حالة الزيارة","name"=>"confirmed"];
-			$this->col[] = ["label"=>"الصفقة","name"=>"tenders"];
-
-			# END COLUMNS DO NOT REMOVE THIS LINE			$this->col[] = ["label"=>"تاريخ الزيارة","name"=>"date"];
-
+			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			$this->form[] = ['label'=>'تاريخ الزيارة','name'=>'date','type'=>'date','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'تاريخ الزيارة','name'=>'date','type'=>'datetime','validation'=>'required|date_format:Y-m-d H:i:s','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'العميل','name'=>'customers_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'customers,name'];
-			$this->form[] = ['label'=>'المندوب','name'=>'cms_users_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'cms_users,name'];
-			$this->form[] = ['label'=>'نتائج الزيارة','name'=>'results','type'=>'textarea','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'نتائج الزيارة','name'=>'results','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
-			//$this->form[] = ['label'=>'تاريخ الزيارة','name'=>'date','type'=>'date','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'العميل','name'=>'customers_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'customers,name'];
-			//$this->form[] = ['label'=>'المندوب','name'=>'representives_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'representives,name'];
-			//$this->form[] = ['label'=>'نتائج الزيارة','name'=>'results','type'=>'textarea','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ["label"=>"Date","name"=>"date","type"=>"datetime","required"=>TRUE,"validation"=>"required|date_format:Y-m-d H:i:s"];
+			//$this->form[] = ["label"=>"Customers Id","name"=>"customers_id","type"=>"select2","required"=>TRUE,"validation"=>"required|integer|min:0","datatable"=>"customers,name"];
+			//$this->form[] = ["label"=>"Cms Users Id","name"=>"cms_users_id","type"=>"select2","required"=>TRUE,"validation"=>"required|integer|min:0","datatable"=>"cms_users,name"];
+			//$this->form[] = ["label"=>"Results","name"=>"results","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Confirmed","name"=>"confirmed","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Tenders","name"=>"tenders","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
 			# OLD END FORM
 
 			/* 
@@ -82,12 +78,7 @@
 	        | 
 	        */
 	        $this->addaction = array();
-			$this->addaction[] = ['label'=>'تأكيد الزيارة','url'=>CRUDBooster::mainpath('set-confirmed/1/[id]'),'icon'=>'fa fa-check','color'=>'success','showIf'=>"[confirmed] == '0'"];
-			$this->addaction[] = ['label'=>'ربح الصفقة','url'=>CRUDBooster::mainpath('set-tenders/1/[id]'),'icon'=>'fa fa-heart','color'=>'danger','showIf'=>"[tenders] == '0'"];
 
-
-			$this->addaction[] = ['label'=>'تم تأكيد الزيارة','icon'=>'fa fa-check','color'=>'primary','showIf'=>"[confirmed] == '1'"];
-			$this->addaction[] = ['label'=>'تم ربح الصفقة','icon'=>'fa fa-heart','color'=>'primary','showIf'=>"[tenders] == '1'"];
 
 	        /* 
 	        | ---------------------------------------------------------------------- 
@@ -245,7 +236,7 @@
 	    */
 	    public function hook_query_index(&$query) {
 	        //Your code here
-	            
+			$query->where('cms_users_id',CRUDBooster::myId());
 	    }
 
 	    /*
@@ -279,6 +270,30 @@
 	    */
 	    public function hook_after_add($id) {        
 	        //Your code here
+
+
+			$config['content'] = "تم تسجيل زيارة جديدة";
+$config['id_cms_users'] = [2]; //This is an array of id users
+CRUDBooster::sendNotification($config);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	    }
 
@@ -330,21 +345,6 @@
 	        //Your code here
 
 	    }
-
-		public function getSetConfirmed($confirmed,$id) {
-			DB::table('visits')->where('id',$id)->update(['confirmed'=>$confirmed]);
-			
-			//This will redirect back and gives a message
-			CRUDBooster::redirect($_SERVER['HTTP_REFERER'],"تم تأكيد الزيارة","info");
-		 }
-		 public function getSetTenders($tenders,$id) {
-			DB::table('visits')->where('id',$id)->update(['tenders'=>$tenders]);
-			
-			//This will redirect back and gives a message
-			CRUDBooster::redirect($_SERVER['HTTP_REFERER'],"مبروك تم ربح الصفقة","info");
-		 }
-
-
 
 
 
