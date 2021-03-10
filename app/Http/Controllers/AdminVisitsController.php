@@ -35,23 +35,25 @@
 			$this->col[] = ["label"=>"المندوب","name"=>"cms_users_id","join"=>"cms_users,name"];
 			$this->col[] = ["label"=>"حالة الزيارة","name"=>"confirmed"];
 			$this->col[] = ["label"=>"الصفقة","name"=>"tenders"];
+			# END COLUMNS DO NOT REMOVE THIS LINE
 
-			# END COLUMNS DO NOT REMOVE THIS LINE			$this->col[] = ["label"=>"تاريخ الزيارة","name"=>"date"];
-
+			$this->col[] = ["label"=>"تاريخ الزيارة","name"=>"date"];
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
 			$this->form[] = ['label'=>'تاريخ الزيارة','name'=>'date','type'=>'date','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'العميل','name'=>'customers_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'customers,name'];
 			$this->form[] = ['label'=>'المندوب','name'=>'cms_users_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'cms_users,name'];
-			$this->form[] = ['label'=>'نتائج الزيارة','name'=>'results','type'=>'textarea','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'نتائج الزيارة','name'=>'results','type'=>'wysiwyg','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'اسم الممثل','name'=>'cname','type'=>'text','validation'=>'required','width'=>'col-sm-9'];
+			$this->form[] = ['label'=>'رقم الممثل','name'=>'cmobile','type'=>'text','validation'=>'required','width'=>'col-sm-9'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
 			//$this->form[] = ['label'=>'تاريخ الزيارة','name'=>'date','type'=>'date','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'العميل','name'=>'customers_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'customers,name'];
-			//$this->form[] = ['label'=>'المندوب','name'=>'representives_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'representives,name'];
+			//$this->form[] = ['label'=>'المندوب','name'=>'cms_users_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'cms_users,name'];
 			//$this->form[] = ['label'=>'نتائج الزيارة','name'=>'results','type'=>'textarea','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			# OLD END FORM
 
